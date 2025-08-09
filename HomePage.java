@@ -1,45 +1,57 @@
+package CapStone.EcommercePrj;
+
+
+import java.io.File;
+import java.time.Duration;
+
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-public class HomePage {
-    private WebDriver driver;
-
-    /* Start Test Case Login Page*/
-    By loginButton = By.id("login2");
-    By email = By.id("loginusername");
-    By password = By.id("loginpassword");
-    By loginButtonForm = By.xpath("//button[contains(text(),'Log in')]");
-    /* End Test Case Login Page*/
+public class RegistrationPage {
 
 
-    /*Start Test Case Navigate to Category List*/
-    By category = By.xpath("//a[contains(text(),'Laptops')]");
-    By product = By.linkText("MacBook Pro");
+	    public static void main(String[] args) {
+	        
+	        WebDriver driver = new ChromeDriver();
+	        driver.manage().window().maximize();
+	        
+	       
+	        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-    /*End Test Case Navigate to Category List*/
+	        try {
+	           
+	            driver.get("https://www.demoblaze.com/"); 
 
-    public HomePage (WebDriver driver)
-    {
-        this.driver = driver;
-    }
+	            
+	            driver.findElement(By.linkText("Sign up")).click();
 
-    /* Start Test Case Login Page*/
-    public void ClickOnLoginButton (){driver.findElement(loginButton).click();}
-    public void EnterEmail (String E) {driver.findElement(email).sendKeys(E);} // Shortcut Email -> E
-    public void EnterPassword (String P) {driver.findElement(password).sendKeys(P);} // Shortcut Password -> P
-    public void ClickOnLoginButtonForm (){driver.findElement(loginButtonForm).click();}
-    /* End Test Case Login Page*/
+	            
+	            driver.findElement(By.id("sign-username")).sendKeys("testUser");
 
+	            
+	            driver.findElement(By.id("sign-password")).sendKeys("testPass123");
 
-    /*Start Test Case Navigate to Category List*/
-    public void ClickOnCategory(){driver.findElement(category).click();}
-    public ProductDetaildPage ClickOnProduct ()
-    {
-        driver.findElement(product).click();
-        return new ProductDetaildPage(driver);
-    }
-    /*End Test Case Navigate to Category List*/
+	            
+	            driver.findElement(By.xpath("//button[@onClick='register()']")).click();
 
+	           
+	            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	            
+	            File destination = new File(System.getProperty("Desktop") + "/screenshotsr/page.png");
+	            destination.getParentFile().mkdirs(); 
+	            FileUtils.copyFile(screenshot, destination);
 
+	            System.out.println("Screenshot saved at: " + destination.getAbsolutePath());
 
-}
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	           
+	            driver.quit();
+	        }
+	    }
+	}
