@@ -19,7 +19,7 @@ public class RegistrationTest {
 
         try {
             // Open the site
-            driver.get("https://example.com"); // change to your site URL
+            driver.get("https://www.demoblaze.com/"); // change to your site URL
 
             // Click Sign up link
             driver.findElement(By.linkText("Sign up")).click();
