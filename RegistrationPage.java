@@ -1,77 +1,54 @@
-package Pages;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.Duration;
 
-public class RegistrationPage {
-    private final WebDriver driver;
-    TakesScreenshot ts;
-    public RegistrationPage(WebDriver driver) {
-        this.driver = driver;
-    }
+public class RegistrationTest {
+    public static void main(String[] args) {
+        // Set up WebDriver
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        
+        // Implicit wait - applies to all element finds
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-    private final By signupLink = By.linkText("Sign up");
-    private final By username = By.id("sign-username");
-    private final By password = By.id("sign-password");
-    private final By signupButton = By.xpath("//button[@onClick='register()']");
-
-    public void clickSignupLink() {
-        driver.findElement(signupLink).click();
-    }
-
-    public void enterUsername(String uname) {
         try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        driver.findElement(username).sendKeys(uname);
-    }
+            // Open the site
+            driver.get("https://example.com"); // change to your site URL
 
-    public void enterPassword(String pass) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        driver.findElement(password).sendKeys(pass);
-    }
+            // Click Sign up link
+            driver.findElement(By.linkText("Sign up")).click();
 
-    public void clickSignupButton() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        driver.findElement(signupButton).click();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public String takeScreenshot() {
-        String className = this.getClass().getSimpleName();
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        String relativePath = "./screenshots/" + className + "_" + timestamp + ".png";
-        try {
+            // Enter username
+            driver.findElement(By.id("sign-username")).sendKeys("testUser");
+
+            // Enter password
+            driver.findElement(By.id("sign-password")).sendKeys("testPass123");
+
+            // Click Sign up button
+            driver.findElement(By.xpath("//button[@onClick='register()']")).click();
+
+            // Take screenshot of entire screen
+            String timestamp = String.valueOf(System.currentTimeMillis());
             Robot robot = new Robot();
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             Rectangle screenRect = new Rectangle(0, 0, screenSize.width, screenSize.height);
             BufferedImage screenFullImage = robot.createScreenCapture(screenRect);
-
-            File dest = new File(System.getProperty("user.dir") + "/screenshots/" + className + "_" + timestamp + ".png");
+            File dest = new File(System.getProperty("user.dir") + "/screenshots/Registration_" + timestamp + ".png");
             ImageIO.write(screenFullImage, "png", dest);
+
+            System.out.println("Screenshot saved: " + dest.getAbsolutePath());
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            // Close the browser
+            driver.quit();
         }
-        return relativePath;
     }
 }
