@@ -25,9 +25,9 @@ public class CheckoutPage {
             driver.findElement(By.xpath("//button[contains(text(),'Place Order' )]")).click();
 
             
-            driver.findElement(By.id("name")).sendKeys("John Doe");
-            driver.findElement(By.id("country")).sendKeys("USA");
-            driver.findElement(By.id("city")).sendKeys("New York");
+            driver.findElement(By.id("name")).sendKeys("Tanoy");
+            driver.findElement(By.id("country")).sendKeys("India");
+            driver.findElement(By.id("city")).sendKeys("Agartala");
             driver.findElement(By.id("card")).sendKeys("1234567890123456");
             driver.findElement(By.id("month")).sendKeys("12");
             driver.findElement(By.id("year")).sendKeys("2025");
