@@ -1,37 +1,57 @@
-package Tests;
+package CapStone.EcommercePrj;
 
-import Base.BaseClass;
-import Pages.ProductPage;
-import com.aventstack.extentreports.MediaEntityBuilder;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import java.time.Duration;
 
-public class AddToCartTest extends BaseClass {
-    ProductPage productPage = new ProductPage(BaseClass.getDriver());
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-    @BeforeMethod
-    public void startTest() {
-        test = extent.createTest("Add To Cart Feature");
-    }
 
-    @Test
-    public void addProductToTheCart() {
-        productPage.clickLaptopCategory();
+public class AddtoCart {
+    public static void main(String[] args) {
+    	
+    	
+        WebDriver driver = new ChromeDriver();
+        
+        driver.manage().window().maximize();
+        
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        if (!productPage.chooseProduct()) {
-            String screenshotPath = productPage.takeScreenshot();
-            test.fail("Product not found in any category.",MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
-            Assert.fail("Product not found in any category.");
+        
+        try {
+            
+           
+            driver.get("https://www.demoblaze.com/");
+
+            
+            driver.findElement(By.xpath("//a[contains(text(),'Laptops')]")).click();
+
+            
+
+            driver.findElement(By.linkText("MacBook Pro")).click();
+
+            
+            String productName = driver.findElement(By.xpath("//h2[@class='name']")).getText();
+            String productPrice = driver.findElement(By.xpath("//h3[@class='price-container']")).getText();
+
+            System.out.println("The product name is " + productName);
+            System.out.println("The product cost is " + productPrice);
+
+            
+            driver.findElement(By.xpath("//a[contains(text(),'Add to cart')]")).click();
+
+            
+            driver.switchTo().alert().accept();
+
+            System.out.println("Product added to the cart successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+             
+                driver.quit();
         }
-
-        System.out.println("The product name is " + productPage.getProductTitle());
-        System.out.println("The product cost is " + productPage.getProductPrice());
-
-        productPage.addToCart();
-        String screenshotPath = productPage.takeScreenshot();
-        productPage.acceptTheAlert();
-
-        test.pass("Product added to the cart successfully", MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+   
     }
 }
+
