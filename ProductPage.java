@@ -1,88 +1,58 @@
-package Pages;
+package CapStone.EcommercePrj;
 
 import org.openqa.selenium.*;
-import java.awt.Rectangle;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import static org.apache.commons.io.FileUtils.waitFor;
+import org.openqa.selenium.chrome.ChromeDriver;
+import java.time.Duration;
 
 public class ProductPage {
-    private final WebDriver driver;
-    public ProductPage(WebDriver driver) {
-        this.driver = driver;
-    }
-    private final By laptopCategory = By.linkText("Laptops");
-    private final By product = By.linkText("MacBook Pro");
-    private final By productTitle = By.xpath("//h2[@class='name']");
-    private final By productPrice = By.xpath("//h3[@class='price-container']");
-    private final By addToCartButton = By.linkText("Add to cart");
+    public static void main(String[] args) {
+    	
+        WebDriver driver = new ChromeDriver();
 
-    public void clickLaptopCategory(){
-        driver.findElement(laptopCategory).click();
+        driver.manage().window().maximize();
+        
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
         try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+            
+            driver.get("https://www.demoblaze.com/");
 
-    public Boolean chooseProduct() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+            driver.findElement(By.linkText("Laptops")).click();
 
-        if (!driver.findElements(product).isEmpty()) {
-            driver.findElement(product).click();
-            return true;
-        }
-        return false;
-    }
+            
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 
+            if (!driver.findElements(By.linkText("MacBook Pro")).isEmpty()) {
+                driver.findElement(By.linkText("MacBook Pro")).click();
+            } 
+            
+            else {
+                System.out.println("MacBook Pro not found.");
+                return;
+            }
 
-    public String getProductTitle(){
-        String productName = driver.findElement(productTitle).getText();
-        return productName;
-    }
+           
+            String productName = driver.findElement(By.xpath("//h2[@class='name']")).getText();
+            String productPrice = driver.findElement(By.xpath("//h3[@class='price-container']")).getText();
 
-    public String getProductPrice(){
-        String productCost = driver.findElement(productPrice).getText();
-        return productCost;
-    }
+            System.out.println("Product Name: " + productName);
+            System.out.println("Product Price: " + productPrice);
 
-    public void addToCart(){
-        driver.findElement(addToCartButton).click();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+      
+            driver.findElement(By.linkText("Add to cart")).click();
 
-    public String takeScreenshot() {
-        String className = this.getClass().getSimpleName();
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        String relativePath = "./screenshots/" + className + "_" + timestamp + ".png";
-        try {
+            
+            driver.switchTo().alert().accept();
 
-            Robot robot = new Robot();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            Rectangle screenRect = new Rectangle(0, 0, screenSize.width, screenSize.height);
-            BufferedImage screenFullImage = robot.createScreenCapture(screenRect);
-
-            File dest = new File(System.getProperty("user.dir") + "/screenshots/" + className + "_" + timestamp + ".png");
-            ImageIO.write(screenFullImage, "png", dest);
+            System.out.println("Product added to the cart successfully.");
 
         } catch (Exception e) {
             e.printStackTrace();
+        } 
+        
+        finally {
+            driver.quit();
         }
-        return relativePath;
-    }
-
-    public void acceptTheAlert(){
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
     }
 }
