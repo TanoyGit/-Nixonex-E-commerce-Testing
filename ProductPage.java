@@ -21,7 +21,7 @@ public class ProductPage {
 
             
             JavascriptExecutor js = (JavascriptExecutor) driver;
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+            js.executeScript("window.scrollTo(2, document.body.scrollHeight);");
 
             if (!driver.findElements(By.linkText("MacBook Pro")).isEmpty()) {
                 driver.findElement(By.linkText("MacBook Pro")).click();
